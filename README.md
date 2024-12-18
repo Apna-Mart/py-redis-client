@@ -6,10 +6,6 @@ A custom Redis-backed caching solution for Django.
 
 - [Introduction](#introduction)
 - [Installation](#installation)
-- [Usage](#usage)
-- [Features](#features)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## Introduction
 
@@ -20,5 +16,5 @@ The `py-redis-client` package provides a simple, flexible, and efficient caching
 To install `py-redis-client`, use the following command:
 
 ```bash
-pip install py-redis-client
+pip install "py_redis_client @ git+https://github.com/Apna-Mart/py-redis-client.git@main"
 

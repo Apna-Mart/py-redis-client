@@ -1,6 +1,18 @@
-from django_redis import get_redis_connection
+from django.conf import settings
 
 from cache.cache import Cache
 
 
-cache = Cache(get_redis_connection()) 
+# Dictionary-like object for multiple Cache instances
+def get_caches():
+    """
+    Provides a dictionary-like interface to access multiple Cache instances.
+
+    Returns:
+        dict[str, Cache]: A dictionary where keys are cache names and values are Cache instances.
+    """
+    return {name: Cache(name) for name in settings.CACHES.keys()}
+
+# Global instance of Cache for default cache backend
+cache = Cache("default")
+caches = get_caches()

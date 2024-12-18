@@ -1,17 +1,18 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="apna-redis",
-    version="1.0.0",
-    author="ApnaMart",
-    author_email="tech@apnamart.in",
-    description="A Redis-based cache library",
-    long_description=open("README.md").read(),
-    long_description_content_type="text/markdown",
-    url="https://github.com/Apna-Mart/apna-redis",
+    name="py-redis-client",
+    version="0.0.0.1",
     packages=find_packages(),
+    include_package_data=True,
     install_requires=[
-        "redis>=4.0.0",
-    ],
-    python_requires=">=3.6",
-)
+       "redis", "Django"],
+    description="A helper library, built over redis-py, to use as cache, lock etc.",
+    author="Divyank Mishra",
+    author_email="divyank.mishra@apnamart.in",
+    url="https://github.com/Apna-Mart/py-redis-client",
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "Framework :: Django",
+        "License :: OSI Approved :: MIT License",
+    ])

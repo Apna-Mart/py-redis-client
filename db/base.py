@@ -3,12 +3,13 @@ import redis
 from redis import client
 from typing import Union
 
+from constants import CONVERT
 from conversions import Conversions
 from exceptions import MethodNotImplementedError
 
 
 class _RedisDB:
-    conv = Conversions()
+    conv = Conversions(CONVERT)
 
     def __init__(self, redis_conn: Union[
         redis.Redis, client.Pipeline]) -> None:

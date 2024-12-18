@@ -2,7 +2,7 @@ import redis
 from redis import client
 from typing import List
 
-from exceptions import InvalidFormatError
+from py_redis_client.exceptions import InvalidFormatError
 
 
 class Operation:

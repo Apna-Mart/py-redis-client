@@ -3,9 +3,9 @@ import redis
 from redis import client
 from typing import Union
 
-from constants import CONVERT
-from conversions import Conversions
-from exceptions import MethodNotImplementedError
+from py_redis_client.constants import CONVERT
+from py_redis_client.conversions import Conversions
+from py_redis_client.exceptions import MethodNotImplementedError
 
 
 class _RedisDB:

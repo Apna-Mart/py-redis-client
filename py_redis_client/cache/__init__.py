@@ -1,6 +1,6 @@
 from django.conf import settings
 
-from cache.cache import Cache
+from py_redis_client.cache.cache import Cache
 
 
 # Dictionary-like object for multiple Cache instances

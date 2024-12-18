@@ -4,10 +4,11 @@ from typing import Union, Any
 
 from django.core.cache import caches
 from django.conf import settings
-from cache.mapper import Mapper
-from constants import CacheDataType
-from db.base import _RedisDB
-from exceptions import InvalidFormatError
+
+from py_redis_client.cache.mapper import Mapper
+from py_redis_client.constants import CacheDataType
+from py_redis_client.db.base import _RedisDB
+from py_redis_client.exceptions import InvalidFormatError
 
 
 class Cache:

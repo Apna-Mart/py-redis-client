@@ -314,3 +314,13 @@ class Mapper:
             else:
                 to_return[k] = v
         return to_return
+
+    @staticmethod
+    def delete_from_db(redis_conn: redis.Redis, *keys: str) -> None:
+        keys_to_delete = []
+        for key in keys:
+            keys_to_delete.extend([
+                key,
+                "|" + LIST_SEP + "|" + key,
+                "|" + SET_SEP + "|" + key])
+        _RedisDB(redis_conn).delete(*keys_to_delete)

@@ -21,6 +21,7 @@ class _RedisHashMapPipeline(_RedisDB):
             data.items()}
         if expiry:
             self.db_multi(redis_multi)
+        self.db_instance.delete(key)
         self.db_instance.hmset(key, res)
         if expiry:
             self.expire(expiry, *[key])

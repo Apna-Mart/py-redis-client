@@ -70,7 +70,7 @@ class Cache:
         Returns:
             bool: True if the operation is successful.
         """
-        _RedisDB(self.redis_conn).delete(*keys)
+        Mapper.delete_from_db(self.redis_conn, *keys)
         return True
 
     def exists(self, *keys: str) -> bool:

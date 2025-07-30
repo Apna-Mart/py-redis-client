@@ -253,6 +253,8 @@ class Mapper:
                     "Cache keys cannot contain $ or |")
             if isinstance(v, tuple):
                 v = list(v)
+            if not v:
+                continue
             if isinstance(v, MutableMapping):
                 res = {}
                 flatten_hmap(v, res=res)

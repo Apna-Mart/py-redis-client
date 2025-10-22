@@ -58,7 +58,11 @@ class Cache:
             raise InvalidFormatError(
                 f"Cache '{cache_name}' is not configured with a Redis backend."
             )
+        self.key_prefix = cache.key_prefix
         self.redis_conn = cache.client.get_client()
+
+    def make_key(self, key):
+        return "%s:%s" % (self.key_prefix, key)
 
     def delete(self, *keys: str) -> bool:
         """
@@ -70,7 +74,8 @@ class Cache:
         Returns:
             bool: True if the operation is successful.
         """
-        Mapper.delete_from_db(self.redis_conn, *keys)
+        prefixed_keys = [self.make_key(key) for key in keys]
+        Mapper.delete_from_db(self.redis_conn, *prefixed_keys)
         return True
 
     def exists(self, *keys: str) -> bool:
@@ -83,7 +88,8 @@ class Cache:
         Returns:
             bool: True if all keys exist, False otherwise.
         """
-        res = _RedisDB(self.redis_conn).exists(*keys)
+        prefixed_keys = [self.make_key(key) for key in keys]
+        res = _RedisDB(self.redis_conn).exists(*prefixed_keys)
         return True if res == len(keys) else False
 
     def expire(self, expiry: int, *keys: str) -> bool:
@@ -105,7 +111,8 @@ class Cache:
                 f"Cache expire format wrong. Expected int, got {type(expiry)}."
             )
         expiry = datetime.timedelta(seconds=expiry)
-        return _RedisDB(self.redis_conn).expire(expiry, *keys)
+        prefixed_keys = [self.make_key(key) for key in keys]
+        return _RedisDB(self.redis_conn).expire(expiry, *prefixed_keys)
 
     def flush(self) -> bool:
         """
@@ -134,7 +141,8 @@ class Cache:
             )
         timeout = datetime.timedelta(seconds=timeout) if timeout else None
         separator = str(separator) if separator else None
-        Mapper.map_to_db(self.redis_conn, data, timeout, separator)
+        prefixed_data = {self.make_key(key): value for key, value in data.items()}
+        Mapper.map_to_db(self.redis_conn, prefixed_data, timeout, separator)
 
     def set(self, key: str, value: CacheDataType, timeout: int = None, separator: str = "") -> None:
         """
@@ -182,7 +190,8 @@ class Cache:
         Returns:
             CacheDataType | None: The value associated with the key, or None if not found.
         """
-        return Mapper.unmap_from_db(self.redis_conn, key).get(key)
+        prefixed_key = self.make_key(key)
+        return Mapper.unmap_from_db(self.redis_conn, prefixed_key).get(prefixed_key)
 
     def get_many(self, *keys: str) -> dict[str, CacheDataType]:
         """
@@ -194,4 +203,7 @@ class Cache:
         Returns:
             dict: A dictionary with keys and their corresponding values.
         """
-        return Mapper.unmap_from_db(self.redis_conn, *keys)
+        prefixed_keys = [self.make_key(key) for key in keys]
+        result = Mapper.unmap_from_db(self.redis_conn, *prefixed_keys)
+        # Convert prefixed keys back to original keys in the result
+        return {key: result.get(self.make_key(key)) for key in keys}
